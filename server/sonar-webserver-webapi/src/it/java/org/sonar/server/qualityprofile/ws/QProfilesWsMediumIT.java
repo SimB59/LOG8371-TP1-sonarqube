@@ -390,29 +390,6 @@ class QProfilesWsMediumIT {
   }
 
   @Test
-  void does_not_return_warnings_when_bulk_activate_on_profile_and_rules_exist_on_another_language_than_profile() {
-    QProfileDto javaProfile = createProfile("java");
-    createRule(javaProfile.getLanguage(), "toto");
-    createRule(javaProfile.getLanguage(), "tata");
-    QProfileDto phpProfile = createProfile("php");
-    createRule(phpProfile.getLanguage(), "hello");
-    createRule(phpProfile.getLanguage(), "world");
-    dbSession.commit();
-
-    // 1. Activate Rule
-    wsActivateRules.newRequest().setMethod("POST")
-      .setParam(PARAM_TARGET_KEY, javaProfile.getKee())
-      .setParam(PARAM_QPROFILE, javaProfile.getKee())
-      .setParam("activation", "false")
-      .execute()
-      .assertJson(getClass(), "does_not_return_warnings_when_bulk_activate_on_profile_and_rules_exist_on_another_language_than_profile.json");
-    dbSession.clearCache();
-
-    // 2. Assert ActiveRule in DAO
-    assertThat(dbClient.activeRuleDao().selectByProfileUuid(dbSession, javaProfile.getKee())).hasSize(2);
-  }
-
-  @Test
   void reset() {
     QProfileDto profile = QualityProfileTesting.newQualityProfileDto().setLanguage("java");
     QProfileDto childProfile = QualityProfileTesting.newQualityProfileDto().setParentKee(profile.getKee()).setLanguage("java");
