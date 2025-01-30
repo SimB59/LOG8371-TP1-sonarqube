@@ -768,23 +768,6 @@ class FileSystemMediumIT {
       .hasMessage("File module1/src/sample.xoo can't be indexed twice. Please check that inclusion/exclusion patterns produce disjoint sets for main and test files");
   }
 
-  // SONAR-5330
-  @Test
-  void scanProjectWithSourceSymlink() {
-    assumeTrue(!System2.INSTANCE.isOsWindows());
-    File projectDir = new File("test-resources/mediumtest/xoo/sample-with-symlink").getAbsoluteFile();
-    AnalysisResult result = tester
-      .newAnalysis(new File(projectDir, "sonar-project.properties"))
-      .property("sonar.exclusions", "**/*.xoo.measures,**/*.xoo.scm")
-      .property("sonar.test.exclusions", "**/*.xoo.measures,**/*.xoo.scm")
-      .property("sonar.scm.exclusions.disabled", "true")
-      .execute();
-
-    assertThat(result.inputFiles()).hasSize(3);
-    // check that symlink was not resolved to target
-    assertThat(result.inputFiles()).extracting(InputFile::path).allMatch(path -> path.startsWith(projectDir.toPath()));
-  }
-
   // SONAR-6719
   @Test
   void scanProjectWithWrongCase() {

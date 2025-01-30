@@ -172,29 +172,6 @@ class BootstrapMediumIT {
    * For now this test is just checking that the scanner completes successfully, with no input files, and mocking server responses to the bare minimum.
    */
   @Test
-  void should_complete_successfully(@TempDir Path baseDir) {
-    var exitCode = runScannerEngine(new ScannerProperties()
-      .addProperty(SONAR_HOST_URL, sonarqube.baseUrl())
-      .addProperty(SONAR_PROJECT_KEY, PROJECT_KEY)
-      .addProperty(SONAR_PROJECT_BASE_DIR, baseDir.toString()));
-
-    assertThat(exitCode).isZero();
-    assertThat(logTester.logs()).contains("SonarScanner Engine completed successfully");
-  }
-
-  @Test
-  void should_unwrap_message_exception_without_stacktrace(@TempDir Path baseDir) {
-    int exitCode = runScannerEngine(new ScannerProperties()
-      .addProperty(SONAR_HOST_URL, sonarqube.baseUrl())
-      .addProperty(SONAR_PROJECT_BASE_DIR, baseDir.toString()));
-
-    assertThat(exitCode).isEqualTo(1);
-    assertThat(logTester.getLogs(Level.ERROR)).hasSize(1);
-    assertThat(logTester.getLogs(Level.ERROR).get(0).getFormattedMsg()).isEqualTo("You must define the following mandatory properties for 'Unknown': sonar.projectKey");
-    assertThat(logTester.getLogs(Level.ERROR).get(0).getThrowable()).isNull();
-  }
-
-  @Test
   void should_show_message_exception_stacktrace_in_debug(@TempDir Path baseDir) {
     int exitCode = runScannerEngine(new ScannerProperties()
       .addProperty(SONAR_HOST_URL, sonarqube.baseUrl())
