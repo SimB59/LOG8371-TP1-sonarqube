@@ -1,11 +1,11 @@
-name: Java CI
+name: Java CI with Gradle & SonarQube
 
 on:  
   push:  
-    branches: [ master ]  
+    branches: [ main ]  
   pull_request:  
-    branches: [ master ]
-  workflow_dispatch:
+    branches: [ main ]  
+  workflow_dispatch:  # Exécution manuelle
 
 jobs:  
   build:  
@@ -31,5 +31,8 @@ jobs:
           key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}  
           restore-keys: gradle-  
 
-      - name: Build and run tests  
+      - name: Build project  
         run: ./gradlew build  
+
+      - name: Start SonarQube  
+        run: bin/linux-x86 64/sonar.sh
