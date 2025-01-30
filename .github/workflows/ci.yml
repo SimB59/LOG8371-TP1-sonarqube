@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:  
-  test:  
+  build:  
     runs-on: ubuntu-latest  
 
     steps:  
@@ -21,12 +21,15 @@ jobs:
           distribution: 'temurin'  
           java-version: '17'  
 
-      - name: Cache Maven dependencies  
+      - name: Grant execute permission to Gradle wrapper  
+        run: chmod +x gradlew  
+
+      - name: Cache Gradle dependencies  
         uses: actions/cache@v3  
         with:  
-          path: ~/.m2  
-          key: maven-${{ hashFiles('**/pom.xml') }}  
-          restore-keys: maven-  
+          path: ~/.gradle  
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}  
+          restore-keys: gradle-  
 
       - name: Build and run tests  
-        run: mvn clean test
+        run: ./gradlew build  
