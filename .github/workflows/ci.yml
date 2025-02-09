@@ -38,4 +38,4 @@ jobs:
         run: ls -la sonar-application
 
       - name: Start SonarQube  
-        run: cd sonar-application && ./sonar.sh start
+        run: cd sonar-application && sonar.sh start
