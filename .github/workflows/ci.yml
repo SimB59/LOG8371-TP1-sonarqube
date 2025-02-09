@@ -37,5 +37,8 @@ jobs:
       - name: List contents of sonar-application directory
         run: ls -la sonar-application
 
+      - name: Grant execute permission to sonar.sh
+        run: chmod +x sonar-application/sonar.sh
+
       - name: Start SonarQube  
-        run: cd sonar-application && sonar.sh start
+        run: cd sonar-application && ./sonar.sh start
