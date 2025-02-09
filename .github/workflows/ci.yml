@@ -2,7 +2,7 @@ name: Java CI with Gradle & SonarQube
 
 on:  
   push:  
-    branches: [ main ]  
+    branches: [ main, sim3.1 ]  
   pull_request:  
     branches: [ main ]  
   workflow_dispatch:  # Exécution manuelle
@@ -31,8 +31,14 @@ jobs:
           key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}  
           restore-keys: gradle-  
 
-      - name: Build project  
-        run: ./gradlew build  
+      # - name: Build project  
+      #   run: ./gradlew build  
+
+      - name: List contents of sonar-application directory
+        run: ls -la sonar-application
+
+      - name: Grant execute permission to sonar.sh
+        run: chmod +x sonar-application/sonar.sh
 
       - name: Start SonarQube  
-        run: bin/linux-x86-64/sonar.sh start
+        run: sonar-application/sonarqube-25.2-SNAPSHOT/bin/linux-x86-64/sonar.sh start
