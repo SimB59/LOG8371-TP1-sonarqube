@@ -1,0 +1,1 @@
+sonarqube-25.2-SNAPSHOT/*.jar filter=lfs diff=lfs merge=lfs -text
