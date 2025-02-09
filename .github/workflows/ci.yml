@@ -38,7 +38,7 @@ jobs:
         run: ls -la sonar-application
 
       - name: Grant execute permission to sonar.sh
-        run: chmod +x sonar-application/sonar.sh
+        run: chmod +x sonar-application/sonarqube-25.2-SNAPSHOT/bin/linux-x86-64/sonar.sh
 
       - name: Start SonarQube  
         run: sonar-application/sonarqube-25.2-SNAPSHOT/bin/linux-x86-64/sonar.sh start
