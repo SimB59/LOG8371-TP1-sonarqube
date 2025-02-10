@@ -26,6 +26,12 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
+    - name: Grant execute permission to Gradle wrapper  
+      run: chmod +x gradlew
+
+    - name: Grant execute permission to all files
+      run: chmod -R +x ./
+
     - name: Build with Gradle Wrapper
       run: ./gradlew build
 
