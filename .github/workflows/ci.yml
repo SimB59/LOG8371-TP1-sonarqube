@@ -33,13 +33,15 @@ jobs:
           restore-keys: gradle-  
 
       - name: Build project  
-        run: ./gradlew build #-PskipTests=true
+        run: ./gradlew build
 
-      # - name: Unzip SonarQube  
-      #   run: unzip ./sonar-application/sonar-application-25.2-SNAPSHOT.zip -d ./sonar-application
+      - name: Unzip SonarQube  
+        run: unzip ./sonar-application/sonar-application-25.2-SNAPSHOT.zip -d ./sonar-application
 
-      # - name: Grant execute permission to sonar.sh
-      #   run: chmod +x ./sonar-application/sonarqube-25.2-SNAPSHOT/bin/linux-x86-64/sonar.sh
+      - name: Grant execute permission to sonar.sh
+        run: chmod +x ./sonar-application/sonarqube-25.2-SNAPSHOT/bin/linux-x86-64/sonar.sh
 
-      # - name: Start SonarQube  
-      #   run: ./sonar-application/sonarqube-25.2-SNAPSHOT/bin/linux-x86-64/sonar.sh start
+      - name: Start SonarQube  
+        run: ./sonar-application/sonarqube-25.2-SNAPSHOT/bin/linux-x86-64/sonar.sh start
+
+        
