@@ -4,101 +4,42 @@ on:
   push:  
     branches: [ main, sim ] 
   pull_request:  
-    branches: [ main ] 
+    branches: [ main ]
 
-jobs:
-  build:
-
+jobs:  
+  build:  
     runs-on: ubuntu-latest
-
     permissions:
       contents: read
 
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+    steps:  
+      - name: Checkout repository  
+        uses: actions/checkout@v4  
 
-    # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+      - name: Set up JDK 17  
+        uses: actions/setup-java@v3  
+        with:  
+          distribution: 'temurin'  
+          java-version: '17' 
 
-    - name: Grant execute permission to Gradle wrapper  
-      run: chmod +x gradlew
+      - name: Grant execute permission to Gradle wrapper  
+        run: chmod +x gradlew
 
-    - name: Grant execute permission to all files
-      run: chmod -R +x ./
+      - name: Cache Gradle dependencies  
+        uses: actions/cache@v3  
+        with:  
+          path: ~/.gradle  
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}  
+          restore-keys: gradle-  
 
-    - name: Build with Gradle Wrapper
-      run: ./gradlew build
+      - name: Build project  
+        run: ./gradlew build #-PskipTests=true
 
-    # Extract the sonar-application ZIP file
-    - name: Extract sonar-application ZIP
-      run: unzip ./sonar-application/build/distributions/sonar-application-25.2-SNAPSHOT.zip -d ./sonar-application/build/distributions
+      # - name: Unzip SonarQube  
+      #   run: unzip ./sonar-application/sonar-application-25.2-SNAPSHOT.zip -d ./sonar-application
 
-    - name: Start SonarQube  
-      run: ./sonar-application/build/distributions/sonarqube-25.2-SNAPSHOT/bin/linux-x86-64/sonar.sh start
-# jobs:  
-#   build:  
-#     runs-on: ubuntu-latest
-#     permissions:
-#       contents: read
+      # - name: Grant execute permission to sonar.sh
+      #   run: chmod +x ./sonar-application/sonarqube-25.2-SNAPSHOT/bin/linux-x86-64/sonar.sh
 
-#     steps:  
-#       - name: Checkout repository  
-#         uses: actions/checkout@v4  
-
-#       - name: Set up JDK 17  
-#         uses: actions/setup-java@v4
-#         with:  
-#           distribution: 'temurin'  
-#           java-version: '17'  
-
-#       - name: Setup Gradle
-#         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
-
-#       - name: Grant execute permission to Gradle wrapper  
-#         run: chmod +x gradlew
-
-#       # - name: Cache Gradle dependencies  
-#       #   uses: actions/cache@v4  
-#       #   with:  
-#       #     path: ~/.gradle  
-#       #     key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}  
-#       #     restore-keys: gradle-  
-
-#       - name: Build project  
-#         run: ./gradlew build -PskipTests=true
-
-#       - name: List contents of zip file
-#         run: unzip -l ./sonar-application/build/distributions/sonar-application-25.2-SNAPSHOT.zip
-
-#       - name: Unzip SonarQube  
-#         run: unzip ./sonar-application/build/distributions/sonar-application-25.2-SNAPSHOT.zip -d ./sonar-application/build/distributions
-
-#       - name: List contents of sonar-application directory
-#         run: ls -R ./sonar-application/build/distributions
-
-#       - name: Grant execute permission to sonar.sh
-#         run: chmod +x ./sonar-application/build/distributions/sonarqube-25.2-SNAPSHOT/bin/linux-x86-64/sonar.sh
-
-#       - name: Start SonarQube  
-#         run: ./sonar-application/build/distributions/sonarqube-25.2-SNAPSHOT/bin/linux-x86-64/sonar.sh start
-      
-#       # # unzip sonar-application-25.2-SNAPSHOT.zip
-#       # - name: Unzip SonarQube  
-#       #   run: unzip sonar-application-25.2-SNAPSHOT.zip -d sonar-application
-
-#       # # - name: List contents of sonar-application directory
-#       # #   run: ls -la sonar-application/sonarqube-25.2-SNAPSHOT/bin/linux-x86-64
-
-#       # - name: Grant execute permission to sonar.sh
-#       #   run: chmod +x sonar-application/sonarqube-25.2-SNAPSHOT/bin/linux-x86-64/sonar.sh
-
-#       # - name: Start SonarQube  
-#       #   run: sonar-application/sonarqube-25.2-SNAPSHOT/bin/linux-x86-64/sonar.sh start
-#       #   # run: sonar-application/build/distributions/sonarqube-25.2-SNAPSHOT/bin/linux-x86-64/sonar.sh start
-#       #   # sonar-application\sonarqube-25.2-SNAPSHOT\bin\linux-x86-64\sonar.sh
+      # - name: Start SonarQube  
+      #   run: ./sonar-application/sonarqube-25.2-SNAPSHOT/bin/linux-x86-64/sonar.sh start
